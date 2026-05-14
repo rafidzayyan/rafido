@@ -8,7 +8,7 @@ const anthropic = new Anthropic({
 
 export async function POST(request: NextRequest) {
   try {
-    const { prompt, reference } = await request.json();
+    const { prompt, reference, imageName } = await request.json();
 
     if (!prompt) {
       return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     const systemPrompt = `You are an expert at creating Excel spreadsheets. Generate a JSON array of objects representing the rows of an Excel spreadsheet based on the user's prompt. Each object should have keys as column headers and values as cell data. Include formulas where appropriate using Excel formula syntax (e.g., =SUM(A1:A10)). Ensure the data is structured and useful.`;
 
-    const userMessage = `Prompt: ${prompt}\n${reference ? `Reference: ${reference}` : ''}\n\nReturn only a valid JSON array of objects, no additional text.`;
+    const userMessage = `Prompt: ${prompt}\n${reference ? `Reference: ${reference}\n` : ''}${imageName ? `Reference image filename: ${imageName}\n` : ''}\nReturn only a valid JSON array of objects, no additional text.`;
 
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',

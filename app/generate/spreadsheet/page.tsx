@@ -1,14 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import NavBar from '../../components/NavBar';
 
 export default function SpreadsheetGenerator() {
   const [prompt, setPrompt] = useState('');
   const [reference, setReference] = useState('');
+  const [referenceImage, setReferenceImage] = useState<File | null>(null);
+  const [referenceImagePreview, setReferenceImagePreview] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState('');
   const [error, setError] = useState('');
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null;
+    setReferenceImage(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setReferenceImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setReferenceImagePreview('');
+    }
+  };
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
@@ -23,7 +39,11 @@ export default function SpreadsheetGenerator() {
       const response = await fetch('/api/generate/spreadsheet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, reference }),
+        body: JSON.stringify({
+          prompt,
+          reference,
+          imageName: referenceImage?.name ?? undefined,
+        }),
       });
 
       if (!response.ok) {
@@ -72,6 +92,27 @@ export default function SpreadsheetGenerator() {
               placeholder="Optional: Provide reference data or structure for the spreadsheet"
               className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Upload reference image
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="block w-full text-sm text-gray-700"
+              />
+            </div>
+            {referenceImagePreview && (
+              <div className="mt-4">
+                <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                <img
+                  src={referenceImagePreview}
+                  alt="Reference preview"
+                  className="max-h-40 rounded-md border border-gray-200"
+                />
+              </div>
+            )}
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Generated Spreadsheet</h2>
