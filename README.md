@@ -1,22 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Digital Product Generator
+
+A Next.js 14 application that generates digital products including Excel spreadsheets, children's worksheets, and ebooks using AI.
+
+## Features
+
+- **Excel Spreadsheet Generator**: Create custom spreadsheets with formulas based on your prompts
+- **Children Worksheet Generator**: Generate PDF worksheets for kids with exercises
+- **Ebook Generator**: Produce complete ebooks with cover, table of contents, and chapters
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 18+
+- npm or yarn
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables:
+   - Copy `.env.local` and add your Anthropic API key:
+     ```
+     ANTHROPIC_API_KEY=your_actual_api_key_here
+     ```
+
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Deployment
+
+This app is configured for deployment on Vercel. After pushing to GitHub, connect your repository to Vercel for automatic deployments.
+
+## Usage
+
+1. Navigate to the homepage and choose a generator
+2. Enter your prompt describing what you want to create
+3. Click generate and download your digital product
+
+Recent generations are stored locally and displayed on the homepage.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
